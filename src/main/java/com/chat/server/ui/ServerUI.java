@@ -1,4 +1,4 @@
-package com.chat.ui;
+package com.chat.server.ui;
 
 import javax.swing.JFrame;
 
