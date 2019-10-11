@@ -12,7 +12,8 @@ public class LogTab extends TabChat {
 
         setLayout(new MigLayout("", "[grow]", "[grow]"));
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane, "cell 0 0,grow");
         scrollPane.setViewportView(outputBox);
         outputBox.setEditable(false);
@@ -20,6 +21,10 @@ public class LogTab extends TabChat {
 
     public LogTab() {
         this("Server Log");
+    }
+
+    @Override
+    public void sendMessage() {
     }
 
 }
