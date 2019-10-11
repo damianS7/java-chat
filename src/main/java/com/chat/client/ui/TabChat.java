@@ -2,9 +2,7 @@ package com.chat.client.ui;
 
 import javax.swing.JTextArea;
 
-import com.chat.client.ClientApplication;
-
-public class TabChat extends Tab {
+public abstract class TabChat extends Tab {
     private static final long serialVersionUID = -4467915743235869875L;
     protected JTextArea outputBox;
     protected JTextArea inputBox;
@@ -24,13 +22,6 @@ public class TabChat extends Tab {
         outputBox.setCaretPosition(outputBox.getDocument().getLength());
     }
 
-    public void sendMessage() {
-        ClientApplication.client.sendMessage("userCredentials.getNickName()", getTitle(), inputBox.getText());
-        inputBox.setText("");
-    }
-
-    protected void sendMessage(String where) {
-        // if where == room ... if where = conversation
-    }
+    public abstract void sendMessage();
 
 }
