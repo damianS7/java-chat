@@ -1,11 +1,6 @@
 package com.chat.client;
 
-import java.util.List;
-
 public interface Chat {
-    public List<String> getActiveConversations();
-
-    public List<String> getActiveRooms();
 
     public String getUsername();
 
