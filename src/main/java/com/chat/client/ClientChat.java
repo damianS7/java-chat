@@ -2,6 +2,8 @@ package com.chat.client;
 
 import java.util.List;
 
+import com.chat.common.Conversation;
+import com.chat.common.Room;
 import com.chat.database.UserCredentials;
 import com.chat.network.Packet;
 import com.chat.network.PacketType;
@@ -9,8 +11,8 @@ import com.chat.network.PacketType;
 public class ClientChat extends Client implements Chat {
     protected UserCredentials userCredentials;
     protected ClientPacketProcessor packetProcess;
-    // protected RoomOpen;
-    // protected conversationsOpen;
+    protected List<Conversation> activeConversations;
+    protected List<Room> activeRooms;
 
     public ClientChat() {
         packetProcess = new ClientPacketProcessor();
@@ -18,11 +20,13 @@ public class ClientChat extends Client implements Chat {
 
     @Override
     public boolean connect() {
-        super.connect();
-        String username = ClientApplication.config.getUsername();
-        String password = ClientApplication.config.getPassword();
 
-        authenticate(username, password);
+        if (!super.connect()) {
+            return false;
+        }
+
+        authenticate(ClientApplication.config.getUsername(),
+                ClientApplication.config.getPassword());
 
         return connection.isAlive();
     }
@@ -72,12 +76,10 @@ public class ClientChat extends Client implements Chat {
         return userCredentials.username;
     }
 
-    @Override
     public List<String> getActiveConversations() {
         return null;
     }
 
-    @Override
     public List<String> getActiveRooms() {
         return null;
     }
