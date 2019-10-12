@@ -23,7 +23,7 @@ dependencies {
     implementation 'com.miglayout:miglayout-swing:5.0'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
 	implementation 'com.google.code.gson:gson:2.8.5'
-
+	implementation 'org.xerial:sqlite-jdbc:3.28.0'
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.0-jre'
 
