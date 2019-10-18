@@ -1,6 +1,6 @@
 package com.chat.server;
 
-import com.chat.ui.ServerUI;
+import com.chat.server.ui.ServerUI;
 import java.awt.EventQueue;
 
 public class ServerApplication {
