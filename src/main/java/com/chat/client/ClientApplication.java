@@ -7,11 +7,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.chat.client.ui.ClientUI;
+import com.chat.common.Preferences;
 
 public class ClientApplication {
     public static ClientUI ui;
     public static ClientChat client;
-    public static Preferences config;
+    public static ClientPreferences config;
     public static Logger LOGGER = Logger.getLogger(ClientApplication.class.getName());
 
     public static void main(String[] args) {
