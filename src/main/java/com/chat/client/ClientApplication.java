@@ -38,7 +38,7 @@ public class ClientApplication {
             }
         }
 
-        config = new Preferences(filePreferences);
+        config = new ClientPreferences(filePreferences);
 
         client = new ClientChat();
 

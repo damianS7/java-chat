@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 
-import com.chat.network.Packet;
 
 public abstract class Client {
     protected ClientConnection connection;
@@ -19,7 +18,7 @@ public abstract class Client {
             new Thread(connection).start();
 
             if (connection.isAlive()) {
-                ClientApplication.ui.setConnectionStatus("Connected");
+                ClientApplication.ui.setStatus("Connected");
                 return true;
             }
 

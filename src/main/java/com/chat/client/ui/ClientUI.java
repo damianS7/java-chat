@@ -155,5 +155,9 @@ public class ClientUI {
         tabsPanel = new JTabbedPane(JTabbedPane.TOP);
         frame.getContentPane().add(tabsPanel, "cell 1 0,grow");
     }
+    
+    public void setStatus(String status) {
+	lblStatus.setText(status);
+    }
 
 }
