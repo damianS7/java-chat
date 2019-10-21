@@ -37,7 +37,6 @@ public class ServerChat extends Server {
         }
 
         ServerApplication.ui.log.addLine("Servidor detenido.");
-
         ServerApplication.ui.setStatus("Stopped.");
         return true;
     }

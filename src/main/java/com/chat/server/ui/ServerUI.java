@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import com.chat.server.ServerApplication;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
@@ -16,7 +15,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
@@ -27,10 +25,10 @@ import javax.swing.border.EmptyBorder;
  */
 public class ServerUI {
     private JPanel panelLoader;
+    private JLabel lblTitle;
     public JFrame frame;
     public LogPanel log;
     public ConfigPanel config;
-    private JLabel lblTitle;
 
     public ServerUI() {
         setLookAndFeel();
@@ -55,7 +53,7 @@ public class ServerUI {
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadPanel("Home", new HomePanel());                
+                loadPanel("Home", new HomePanel());
             }
         });
         panelMenu.add(btnHome, "cell 1 1,alignx left");
@@ -66,7 +64,7 @@ public class ServerUI {
 
         JButton btnRooms = new JButtonLink("Rooms");
         btnRooms.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadPanel("Rooms", new RoomsPanel());
@@ -80,7 +78,7 @@ public class ServerUI {
 
         JButton btnAccounts = new JButtonLink("Accounts");
         btnAccounts.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadPanel("Accounts", new AccountsPanel());
@@ -166,7 +164,7 @@ public class ServerUI {
             }
         });
         titlePanel.add(closeButton);
-        
+
         JSeparator separator = new JSeparator();
         separator.setBounds(4, 28, 690, 4);
         titlePanel.add(separator);
@@ -176,15 +174,15 @@ public class ServerUI {
         panelLoader.setBounds(180, 30, 720, 370);
         frame.getContentPane().add(panelLoader);
         panelLoader.setLayout(new BorderLayout(0, 0));
-        
+
         loadPanel("Home", new HomePanel());
         frame.setVisible(true);
     }
 
     private void setLookAndFeel() {
         try {
-            // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            // UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println(e.getMessage());
         } catch (ClassNotFoundException e) {
@@ -195,7 +193,7 @@ public class ServerUI {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public void initComponents() {
         frame = new JFrame();
         log = new LogPanel();

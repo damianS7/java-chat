@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import com.chat.server.ServerApplication;
@@ -31,6 +30,7 @@ public class ConfigPanel extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportBorder(null);
+        scrollPane.setBorder(null);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane, BorderLayout.CENTER);
 
@@ -56,7 +56,7 @@ public class ConfigPanel extends JPanel {
 
         JButton btnSave = new JButton("SAVE");
         btnSave.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 ServerApplication.config.setAddress(addressField.getText());

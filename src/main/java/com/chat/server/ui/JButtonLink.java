@@ -14,6 +14,7 @@ public class JButtonLink extends JButton {
         setForeground(new Color(185, 187, 189));
         setBackground(null);
         setBorder(null);
+        setFocusPainted(false);
         setContentAreaFilled(false);
         setBorderPainted(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
