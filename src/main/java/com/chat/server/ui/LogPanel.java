@@ -30,6 +30,7 @@ public class LogPanel extends JPanel {
 	textArea.setEditable(false);
 	
 	JScrollPane scrollPane = new JScrollPane();
+	scrollPane.setViewportBorder(null);
 	scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	add(scrollPane, BorderLayout.CENTER);
 	scrollPane.setViewportView(textArea);

@@ -10,7 +10,7 @@ public class JButtonLink extends JButton {
 
     public JButtonLink(String text) {
         super(text);
-        setFont(new Font("Ubuntu", Font.PLAIN, 18));
+        setFont(new Font("Noto Sans", Font.PLAIN, 14));
         setForeground(new Color(185, 187, 189));
         setBackground(null);
         setBorder(null);

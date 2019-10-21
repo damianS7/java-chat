@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 /*
@@ -32,18 +33,18 @@ public class ServerUI {
     private JLabel lblTitle;
 
     public ServerUI() {
+        setLookAndFeel();
         initComponents();
-
         JPanel panelMenu = new JPanel();
         panelMenu.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panelMenu.setBackground(new Color(52, 58, 64));
+        panelMenu.setBackground(new Color(55, 66, 250));
         panelMenu.setBounds(0, 0, 180, 400);
         frame.getContentPane().add(panelMenu);
         panelMenu.setLayout(new MigLayout("", "[16.00][grow,left]", "[][][][][][][][][][][][grow][][]"));
 
         JLabel lblAdministration = new JLabel("Administration");
         lblAdministration.setForeground(new Color(185, 187, 189));
-        lblAdministration.setFont(new Font("Ubuntu", Font.BOLD, 16));
+        lblAdministration.setFont(new Font("Noto Sans", Font.BOLD, 16));
         panelMenu.add(lblAdministration, "cell 0 0 2 1,alignx center");
 
         JLabel label_1 = new JLabel("");
@@ -153,10 +154,11 @@ public class ServerUI {
         lblTitle.setBounds(15, 4, 464, 25);
         titlePanel.add(lblTitle);
 
-        JButton closeButton = new JButtonLink("X");
+        JButton closeButton = new JButtonLink("");
+        closeButton.setIcon(new ImageIcon(ServerUI.class.getResource("/images/close.png")));
         closeButton.setFont(new Font("Noto Sans", Font.BOLD, 18));
         closeButton.setForeground(new Color(255, 0, 0));
-        closeButton.setBounds(698, 0, 22, 20);
+        closeButton.setBounds(694, 4, 26, 14);
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -164,8 +166,13 @@ public class ServerUI {
             }
         });
         titlePanel.add(closeButton);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(4, 28, 690, 4);
+        titlePanel.add(separator);
 
         panelLoader = new JPanel();
+        panelLoader.setBorder(new EmptyBorder(5, 5, 5, 5));
         panelLoader.setBounds(180, 30, 720, 370);
         frame.getContentPane().add(panelLoader);
         panelLoader.setLayout(new BorderLayout(0, 0));
@@ -174,6 +181,21 @@ public class ServerUI {
         frame.setVisible(true);
     }
 
+    private void setLookAndFeel() {
+        try {
+            // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (InstantiationException e) {
+            System.out.println(e.getMessage());
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public void initComponents() {
         frame = new JFrame();
         log = new LogPanel();
