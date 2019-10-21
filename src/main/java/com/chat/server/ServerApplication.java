@@ -19,20 +19,20 @@ public class ServerApplication {
     public static ServerPreferences config;
 
     public static void main(String[] args) {
-	File file = new File("server.properties");
-	
-	// Creacion del fichero de configuracion en caso de no existir
-	if (!file.exists()) {
-	    try {
-		file.createNewFile();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	}
-	
-	config = new ServerPreferences(file);
-	ServerApplication.server = new ServerChat();
-	
+        File file = new File("server.properties");
+
+        // Creacion del fichero de configuracion en caso de no existir
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        config = new ServerPreferences(file);
+        ServerApplication.server = new ServerChat();
+
         // Inicio de la interfaz grafica en un hilo separado
         EventQueue.invokeLater(new Runnable() {
             public void run() {
