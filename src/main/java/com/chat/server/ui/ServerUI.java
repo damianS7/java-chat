@@ -15,6 +15,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 /*
  * Interfaz grafica principal del servidor. Tambien contiene metodos
@@ -22,11 +24,10 @@ import javax.swing.ImageIcon;
  */
 public class ServerUI {
     private JPanel panelLoader;
-    private JLabel labelConnected;
-    private JLabel labelStatus;
     public JFrame frame;
     public LogPanel log;
     public ConfigPanel config;
+    private JLabel lblTitle;
 
     public ServerUI() {
         initComponents();
@@ -35,62 +36,64 @@ public class ServerUI {
         panelMenu.setBackground(new Color(242, 243, 245));
         panelMenu.setBounds(0, 0, 180, 400);
         frame.getContentPane().add(panelMenu);
-        panelMenu.setLayout(new MigLayout("", "[16.00][grow,left]", "[][][][][][][][][]"));
-        
-        JButton menuButton = new JButton("Menu");
-        menuButton.setFont(new Font("Ubuntu", Font.PLAIN, 18));
-        menuButton.setBackground(null);
-        menuButton.setBorder(null);
-        menuButton.setContentAreaFilled(false);
-        menuButton.setBorderPainted(false);
-        menuButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        menuButton.addActionListener(new ActionListener() {
-	    
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		System.exit(1);
-	    }
-	});
+        panelMenu.setLayout(new MigLayout("", "[16.00][grow,left]", "[][][][][][][][][][][][grow][][]"));
         
         JLabel lblAdministration = new JLabel("Administration");
         panelMenu.add(lblAdministration, "cell 0 0 2 1,alignx center");
         
-        JButton btnInfo = new JButton("Info");
+        JLabel label_1 = new JLabel("");
+        label_1.setIcon(new ImageIcon(ServerUI.class.getResource("/javax/swing/plaf/basic/icons/JavaCup16.png")));
+        panelMenu.add(label_1, "cell 0 1");
+        
+        JButton btnInfo = new JButtonLink("Info");
         panelMenu.add(btnInfo, "cell 1 1,alignx left");
         
-        JButton btnRooms = new JButton("Rooms");
+        JLabel label_2 = new JLabel("");
+        panelMenu.add(label_2, "cell 0 2");
+        
+        JButton btnRooms = new JButtonLink("Rooms");
         panelMenu.add(btnRooms, "cell 1 2");
         
-        JButton btnAccounts = new JButton("Accounts");
+        JLabel label_3 = new JLabel("");
+        panelMenu.add(label_3, "cell 0 3");
+        
+        JButton btnAccounts = new JButtonLink("Accounts");
         panelMenu.add(btnAccounts, "cell 1 3");
         
-        JButton btnPrivileges = new JButton("Privileges");
+        JLabel label_4 = new JLabel("");
+        panelMenu.add(label_4, "cell 0 4");
+        
+        JButton btnPrivileges = new JButtonLink("Privileges");
         panelMenu.add(btnPrivileges, "cell 1 4");
         
         JLabel label = new JLabel("");
         label.setIcon(new ImageIcon(ServerUI.class.getResource("/javax/swing/plaf/basic/icons/JavaCup16.png")));
         panelMenu.add(label, "cell 0 5");
         
-        panelMenu.add(menuButton, "cell 1 5");
-        
-        JButton btnLog = new JButton("Log");
+        JButton btnLog = new JButtonLink("Log");
         btnLog.addActionListener(new ActionListener() {
 	    
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		loadPanel(log);
+		loadPanel("Server Log", log);
 	    }
 	});
+        
+        JLabel label_5 = new JLabel("");
+        panelMenu.add(label_5, "cell 0 6");
         panelMenu.add(btnLog, "cell 1 6");
         
-        JButton btnConfig = new JButton("Config");
+        JButton btnConfig = new JButtonLink("Config");
         btnConfig.addActionListener(new ActionListener() {
 	    
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		loadPanel(config);
+		loadPanel("Server config", config);
 	    }
 	});
+        
+        JLabel label_6 = new JLabel("");
+        panelMenu.add(label_6, "cell 0 7");
         panelMenu.add(btnConfig, "cell 1 7");
         
         JButton btnStart = new JButton("Start");
@@ -106,7 +109,7 @@ public class ServerUI {
 		}
 	    }
 	});
-        panelMenu.add(btnStart, "cell 1 8");
+        panelMenu.add(btnStart, "cell 0 13 2 1,growx");
         
         JPanel panelInfo = new JPanel();
         panelInfo.setBackground(new Color(51, 153, 255));
@@ -114,15 +117,16 @@ public class ServerUI {
         frame.getContentPane().add(panelInfo);
         panelInfo.setLayout(null);
         
-        JLabel lblJavaChat = new JLabel("Java Chat");
-        lblJavaChat.setFont(new Font("Ubuntu", Font.BOLD, 22));
-        lblJavaChat.setBounds(15, 10, 115, 19);
-        panelInfo.add(lblJavaChat);
+        lblTitle = new JLabel("Java Chat");
+        lblTitle.setFont(new Font("Ubuntu", Font.BOLD, 18));
+        lblTitle.setBounds(15, 4, 104, 25);
+        panelInfo.add(lblTitle);
         
-        JButton closeButton = new JButton("X");
-        closeButton.setBounds(629, 0, 91, 29);
+        JButton closeButton = new JButtonLink("X");
+        closeButton.setFont(new Font("Noto Sans", Font.BOLD, 18));
+        closeButton.setForeground(new Color(255, 0, 0));
+        closeButton.setBounds(698, 0, 22, 20);
         closeButton.addActionListener(new ActionListener() {
-	    
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		System.exit(1);
@@ -130,35 +134,8 @@ public class ServerUI {
 	});
         panelInfo.add(closeButton);
         
-        JLabel lblStatus = new JLabel("Status");
-        lblStatus.setBounds(134, 11, 69, 20);
-        panelInfo.add(lblStatus);
-        
-        JLabel lblClients = new JLabel("Clients");
-        lblClients.setBounds(284, 11, 69, 20);
-        panelInfo.add(lblClients);
-        
-        JButton btnD = new JButton("D");
-        btnD.addActionListener(new ActionListener() {
-	    
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		showDecotarions();
-	    }
-	});
-        btnD.setBounds(498, 7, 115, 23);
-        panelInfo.add(btnD);
-        
-        labelStatus = new JLabel("Disconnected");
-        labelStatus.setBounds(190, 11, 69, 20);
-        panelInfo.add(labelStatus);
-        
-        labelConnected = new JLabel("0");
-        labelConnected.setBounds(385, 11, 69, 20);
-        panelInfo.add(labelConnected);
-        
         panelLoader = new JPanel();
-        panelLoader.setBackground(new Color(51, 255, 204));
+        panelLoader.setBackground(new Color(0, 0, 128));
         panelLoader.setBounds(180, 30, 720, 370);
         frame.getContentPane().add(panelLoader);
         panelLoader.setLayout(new BorderLayout(0, 0));
@@ -187,23 +164,13 @@ public class ServerUI {
 	labelConnected.setText(connected);
     }
     
-    // Muestra u oculta las decoraciones de ventana
-    public void showDecotarions() {
-	frame.dispose();
-	if (frame.isUndecorated()) {
-	    frame.setUndecorated(false);
-	} else {
-	    frame.setUndecorated(true);
-	}
-	frame.setVisible(true);
-    }
-    
     // Carga un panel en la interfaz
-    public void loadPanel(JPanel panel) {
+    public void loadPanel(String title, JPanel panel) {
 	if ( panelLoader.getComponentCount() > 0) {
 	    panelLoader.removeAll();
 	}
 	
+	lblTitle.setText(title);
 	panelLoader.add(panel, BorderLayout.CENTER);
 	panelLoader.updateUI();
     }
