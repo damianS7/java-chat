@@ -12,12 +12,12 @@ import com.chat.common.JListMouse;
  * 
  * @author danjian
  */
-public class ClientRoomJList extends JListMouse {
+public class JListRooms extends JListMouse {
 
     private static final long serialVersionUID = 961840196718831753L;
     private List<String> rooms = new ArrayList<String>();
 
-    public ClientRoomJList() {
+    public JListRooms() {
 	super();
     }
 

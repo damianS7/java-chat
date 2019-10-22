@@ -17,11 +17,11 @@ import net.miginfocom.swing.MigLayout;
 
 public class RoomTab extends TabChat {
     private static final long serialVersionUID = -7400661692831081968L;
-    private RoomUserList list;
+    private JListUsersRoom list;
 
     public RoomTab(String title) {
         super(title);
-        list = new RoomUserList();
+        list = new JListUsersRoom();
         outputBox.setEditable(false);
         setLayout(
                 new MigLayout("", "[332px,grow][100px]", "[202px,grow][80px]"));
@@ -85,7 +85,7 @@ public class RoomTab extends TabChat {
         list.addUsers(users);
     }
 
-    public RoomUserList getList() {
+    public JListUsersRoom getList() {
         return list;
     }
 
