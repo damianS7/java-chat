@@ -16,24 +16,24 @@ public abstract class Server implements Runnable {
     private int port;
 
     // Socket principal del servidor
-    private ServerSocket serverSocket;
+    protected ServerSocket serverSocket;
 
     // Estado actual del servidor
     private boolean started = false;
 
     // Devuelve el estado actual del servidor. true para el servidor iniciado.
     public boolean isStarted() {
-        return started;
+	return started;
     }
 
     // Cambia el puerto de esucha del servidor
     public void setPort(int port) {
-        this.port = port;
+	this.port = port;
     }
 
     // Cambia la direccion del servidor
     public void setAddress(String address) {
-        this.address = address;
+	this.address = address;
     }
 
     /**
@@ -44,22 +44,22 @@ public abstract class Server implements Runnable {
      *         inicia el servidor se devuelve <strong>false</strong>.
      */
     public boolean start() {
-        // Si el servidor ya esta iniciado no se hace nada
-        if (isStarted()) {
-            return true;
-        }
+	// Si el servidor ya esta iniciado no se hace nada
+	if (isStarted()) {
+	    return true;
+	}
 
-        try {
-            InetAddress addr = InetAddress.getByName(address);
-            serverSocket = new ServerSocket(port, 0, addr);
-            started = true;
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	try {
+	    InetAddress addr = InetAddress.getByName(address);
+	    serverSocket = new ServerSocket(port, 0, addr);
+	    started = true;
+	    return true;
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
 
-        // Error al iniciar el servidor
-        return false;
+	// Error al iniciar el servidor
+	return false;
     }
 
     /**
@@ -70,17 +70,18 @@ public abstract class Server implements Runnable {
      *         detiene el servidor se devuelve <strong>false</strong>.
      */
     public boolean stop() {
-        // El servidor no esta iniciado.
-        if (!isStarted()) {
-            return true;
-        }
+	// El servidor no esta iniciado.
+	if (!isStarted()) {
+	    return true;
+	}
 
-        try {
-            serverSocket.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+	try {
+	    serverSocket.close();
+	    started = false;
+	    return true;
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	return false;
     }
 }

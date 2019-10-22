@@ -19,8 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
+import com.chat.common.Room;
 import com.chat.server.ServerApplication;
-import com.chat.server.database.RoomDatabaseRow;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -35,10 +35,10 @@ public class RoomsPanel extends JPanel {
 
     public RoomsPanel() {
 	super();
-	setLayout(new MigLayout("", "[grow,fill][200px:n,right][grow]", "[][][][grow][][][]"));
+	setLayout(new MigLayout("", "[200px:n,right][grow][grow,fill]", "[][][][grow][][][]"));
 
 	JScrollPane scrollPane = new JScrollPane();
-	add(scrollPane, "cell 0 0 1 4,grow");
+	add(scrollPane, "cell 2 0 1 4,grow");
 
 	listModel = new DefaultListModel<String>();
 	list = new JList<String>();
@@ -48,25 +48,25 @@ public class RoomsPanel extends JPanel {
 	scrollPane.setViewportView(list);
 
 	JLabel lblRoom = new JLabel("Room");
-	add(lblRoom, "cell 1 0,alignx right");
+	add(lblRoom, "cell 0 0,alignx right");
 
 	roomName = new JTextField();
 	roomName.setHorizontalAlignment(SwingConstants.RIGHT);
-	add(roomName, "cell 2 0,growx");
+	add(roomName, "cell 1 0,growx");
 	roomName.setColumns(10);
 
 	JLabel lblMaxUsers = new JLabel("Max users");
-	add(lblMaxUsers, "cell 1 1,alignx right");
+	add(lblMaxUsers, "cell 0 1,alignx right");
 
 	maxUsers = new JSpinner();
 	maxUsers.setModel(new SpinnerNumberModel(20, 1, 1000, 1));
-	add(maxUsers, "cell 2 1,growx");
+	add(maxUsers, "cell 1 1,growx");
 
 	JLabel lblDescription = new JLabel("Description");
-	add(lblDescription, "cell 1 2");
+	add(lblDescription, "cell 0 2");
 
 	JScrollPane scrollPane_1 = new JScrollPane();
-	add(scrollPane_1, "cell 2 2 1 2,grow");
+	add(scrollPane_1, "cell 1 2 1 2,grow");
 
 	description = new JTextArea();
 	scrollPane_1.setViewportView(description);
@@ -91,7 +91,7 @@ public class RoomsPanel extends JPanel {
 	    }
 	});
 
-	add(btnDelete, "cell 0 4,growx");
+	add(btnDelete, "cell 2 4,growx");
 
 	JButton btnAddmodify = new JButton("Add/Modify");
 	btnAddmodify.addActionListener(new ActionListener() {
@@ -106,7 +106,7 @@ public class RoomsPanel extends JPanel {
 		    return;
 		}
 
-		RoomDatabaseRow r = new RoomDatabaseRow(name, desc, "");
+		Room r = new Room(name, desc);
 		String[] mods = mod.getText().split(",");
 
 		for (String mod : mods) {
@@ -123,25 +123,25 @@ public class RoomsPanel extends JPanel {
 	});
 
 	JLabel lblMod = new JLabel("Mod");
-	add(lblMod, "cell 1 4,alignx right");
+	add(lblMod, "cell 0 4,alignx right");
 
 	mod = new JTextField();
 	mod.setHorizontalAlignment(SwingConstants.RIGHT);
-	add(mod, "cell 2 4,growx");
+	add(mod, "cell 1 4,growx");
 	mod.setColumns(10);
-	add(btnAddmodify, "cell 2 5,growx");
+	add(btnAddmodify, "cell 1 5,growx");
 
 	JPanel panel = new JPanel();
 	FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 	flowLayout.setAlignment(FlowLayout.RIGHT);
-	add(panel, "cell 2 6,grow");
+	add(panel, "cell 1 6,grow");
 
 	setVisible(true);
     }
 
     private void loadRooms() {
-	List<RoomDatabaseRow> rooms = ServerApplication.roomDatabase.getRooms();
-	for (RoomDatabaseRow row : rooms) {
+	List<Room> rooms = ServerApplication.roomDatabase.getRooms();
+	for (Room row : rooms) {
 	    listModel.addElement(row.name);
 	}
     }

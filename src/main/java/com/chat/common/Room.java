@@ -1,10 +1,17 @@
 package com.chat.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Room {
-    public List<String> users = new ArrayList<String>();
-    public String roomName;
-    public String roomDescription;
+
+    public String name;
+    public String description;
+
+    public Room(String name, String description) {
+	this.name = name;
+	this.description = description;
+    }
+
+    public Room() {
+	this("", "");
+    }
+
 }
