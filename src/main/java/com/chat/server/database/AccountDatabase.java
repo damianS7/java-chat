@@ -11,9 +11,9 @@ import java.util.List;
 
 import com.chat.database.SQLiteDatabase;
 
-public class UserDatabase extends SQLiteDatabase {
+public class AccountDatabase extends SQLiteDatabase {
 
-    public UserDatabase(File database) {
+    public AccountDatabase(File database) {
         super(database);
     }
 
@@ -22,16 +22,14 @@ public class UserDatabase extends SQLiteDatabase {
         List<UserDatabaseRow> udrList = getUsers();
 
         for (UserDatabaseRow user : udrList) {
-            System.out.println("Username: " + user.username + " Password: "
-                    + user.password + " Role: " + user.role);
+            System.out.println("Username: " + user.username + " Password: " + user.password + " Role: " + user.role);
         }
     }
 
     // Crea la tabla (si no existe) de la base datos
     public int createStructure() {
         String query = "CREATE TABLE IF NOT EXISTS USERS (USERNAME CHAR(20) "
-                + "PRIMARY KEY NOT NULL, PASSWORD CHAR(50) NOT NULL, "
-                + "ROLE CHAR(10) NOT NULL)";
+                + "PRIMARY KEY NOT NULL, PASSWORD CHAR(50) NOT NULL, " + "ROLE CHAR(10) NOT NULL)";
         return executeUpdate(query);
     }
 
@@ -52,8 +50,7 @@ public class UserDatabase extends SQLiteDatabase {
         int result = 0;
         String sql = "INSERT INTO USERS (USERNAME, PASSWORD,ROLE) VALUES(?,?,?)";
 
-        PreparedStatement pstmt = connection.getConnection()
-                .prepareStatement(sql);
+        PreparedStatement pstmt = connection.getConnection().prepareStatement(sql);
         pstmt.setString(1, user.username);
         pstmt.setString(2, user.password);
         pstmt.setString(3, user.role);
@@ -66,8 +63,7 @@ public class UserDatabase extends SQLiteDatabase {
     public int deleteUser(String username) throws SQLException {
         int result = 0;
         String sql = "DELETE FROM USERS WHERE USERNAME = ?";
-        PreparedStatement pstmt = connection.getConnection()
-                .prepareStatement(sql);
+        PreparedStatement pstmt = connection.getConnection().prepareStatement(sql);
         pstmt.setString(1, username);
         result = pstmt.executeUpdate();
         pstmt.close();
@@ -76,12 +72,10 @@ public class UserDatabase extends SQLiteDatabase {
 
     // 1 Si se actualiza alguna fila
     // 0 Si no se actualiza ninguna fila
-    public int updateUser(String username, String field, String value)
-            throws SQLException {
+    public int updateUser(String username, String field, String value) throws SQLException {
         int result = 0;
         String sql = "UPDATE USERS SET " + field + " = ? WHERE USERNAME = ?";
-        PreparedStatement pstmt = connection.getConnection()
-                .prepareStatement(sql);
+        PreparedStatement pstmt = connection.getConnection().prepareStatement(sql);
         pstmt.setString(1, value);
         pstmt.setString(2, username);
         result = pstmt.executeUpdate();
@@ -94,8 +88,7 @@ public class UserDatabase extends SQLiteDatabase {
         List<UserDatabaseRow> udrList = new ArrayList<UserDatabaseRow>();
         try {
             Statement s = connection.getConnection().createStatement();
-            ResultSet rs = s
-                    .executeQuery("SELECT USERNAME, PASSWORD, ROLE FROM USERS");
+            ResultSet rs = s.executeQuery("SELECT USERNAME, PASSWORD, ROLE FROM USERS");
             while (rs.next()) {
                 UserDatabaseRow udr = new UserDatabaseRow();
 
