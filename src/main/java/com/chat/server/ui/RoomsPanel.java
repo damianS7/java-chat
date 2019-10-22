@@ -4,9 +4,12 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,11 +26,12 @@ import net.miginfocom.swing.MigLayout;
 
 public class RoomsPanel extends JPanel {
     private static final long serialVersionUID = -7985614931111845166L;
-    private ServerRoomJList list;
+    private JList<String> list;
     private JTextField roomName;
     private JSpinner maxUsers;
     private JTextArea description;
     private JTextField mod;
+    private DefaultListModel<String> listModel;
 
     public RoomsPanel() {
 	super();
@@ -36,7 +40,11 @@ public class RoomsPanel extends JPanel {
 	JScrollPane scrollPane = new JScrollPane();
 	add(scrollPane, "cell 0 0 1 4,grow");
 
-	list = new ServerRoomJList(ServerApplication.roomDatabase.getRooms());
+	listModel = new DefaultListModel<String>();
+	list = new JList<String>();
+	list.setModel(listModel);
+	loadRooms();
+
 	scrollPane.setViewportView(list);
 
 	JLabel lblRoom = new JLabel("Room");
@@ -77,7 +85,7 @@ public class RoomsPanel extends JPanel {
 			} catch (SQLException e1) {
 			    e1.printStackTrace();
 			}
-			list.removeRoom(name);
+			listModel.remove(list.getSelectedIndex());
 		    }
 		}
 	    }
@@ -110,7 +118,7 @@ public class RoomsPanel extends JPanel {
 		} catch (SQLException e1) {
 		    e1.printStackTrace();
 		}
-		list.addRoom(name);
+		listModel.addElement(name);
 	    }
 	});
 
@@ -130,4 +138,12 @@ public class RoomsPanel extends JPanel {
 
 	setVisible(true);
     }
+
+    private void loadRooms() {
+	List<RoomDatabaseRow> rooms = ServerApplication.roomDatabase.getRooms();
+	for (RoomDatabaseRow row : rooms) {
+	    listModel.addElement(row.name);
+	}
+    }
+
 }
