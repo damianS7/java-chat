@@ -1,6 +1,5 @@
 package com.chat.common;
 
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.DefaultListModel;
@@ -9,7 +8,7 @@ import javax.swing.ListSelectionModel;
 
 // Una lista que permite acciones con el raton
 
-public class JListMouse extends JList<String> implements MouseListener {
+public abstract class JListMouse extends JList<String> implements MouseListener {
     protected DefaultListModel<String> model;
 
     public JListMouse() {
@@ -26,30 +25,4 @@ public class JListMouse extends JList<String> implements MouseListener {
     public void clearList() {
         model.clear();
     }
-
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
 }
