@@ -1,9 +1,13 @@
 package com.chat.server;
 
-import com.chat.server.ui.ServerUI;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+
+import com.chat.server.database.AccountDatabase;
+import com.chat.server.database.RoomDatabase;
+import com.chat.server.ui.ServerUI;
 
 /*
  * Esta clase es el "bootstrap" de la aplicacion. Desde esta clase tenemos
@@ -17,27 +21,43 @@ public class ServerApplication {
     public static ServerUI ui;
     public static ServerChat server;
     public static ServerPreferences config;
+    public static RoomDatabase roomDatabase;
+    public static AccountDatabase accountDatabase;
 
-    public static void main(String[] args) {
-        File file = new File("server.properties");
+    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
+	File fileProperties = new File("server.properties");
+	File fileRooms = new File("rooms.sqlite");
+	File fileAccounts = new File("accounts.sqlite");
 
-        // Creacion del fichero de configuracion en caso de no existir
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+	// Comprobacion de ficheros
+	if (!fileProperties.exists()) {
+	    fileProperties.createNewFile();
+	}
 
-        config = new ServerPreferences(file);
-        ServerApplication.server = new ServerChat();
+	if (!fileAccounts.exists()) {
+	    fileAccounts.createNewFile();
+	}
 
-        // Inicio de la interfaz grafica en un hilo separado
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ServerApplication.ui = new ServerUI();
-            }
-        });
+	if (!fileRooms.exists()) {
+	    fileRooms.createNewFile();
+	}
+
+	roomDatabase = new RoomDatabase(fileRooms);
+	roomDatabase.connect();
+	roomDatabase.createStructure();
+
+	accountDatabase = new AccountDatabase(fileAccounts);
+	accountDatabase.connect();
+	accountDatabase.createStructure();
+
+	config = new ServerPreferences(fileProperties);
+	server = new ServerChat();
+
+	// Inicio de la interfaz grafica en un hilo separado
+	EventQueue.invokeLater(new Runnable() {
+	    public void run() {
+		ServerApplication.ui = new ServerUI();
+	    }
+	});
     }
 }
