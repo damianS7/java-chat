@@ -9,9 +9,8 @@ import com.chat.network.packets.Packet;
 import com.chat.network.packets.PingPacket;
 
 public class ClientChat extends Client implements Chat {
-    protected ClientConnection connection;
+    protected ClientServerSocket connection;
     protected UserCredentials userCredentials;
-    protected ClientConnectionPacketHandler packetHandler;
     protected List<Conversation> activeConversations;
     protected List<Room> activeRooms;
 
@@ -20,14 +19,21 @@ public class ClientChat extends Client implements Chat {
         if (!super.connect()) {
             return false;
         }
-        
-        connection = new ClientConnection(socket);
-        packetHandler = new ClientConnectionPacketHandler(connection);
-        new Thread(packetHandler).start();
 
+        connection = new ClientServerSocket(socket);
 
-        //authenticate(ClientApplication.config.getUsername(),
-                //ClientApplication.config.getPassword());
+        // authenticate(ClientApplication.config.getUsername(),
+        // ClientApplication.config.getPassword());
+
+        for (int i = 0; i < 5; i++) {
+            connection.writePacket(new PingPacket());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
         return connection.isAlive();
     }
@@ -49,15 +55,13 @@ public class ClientChat extends Client implements Chat {
     }
 
     @Override
-    public void sendMessageToRoom(String from, String roomName,
-            String message) {
+    public void sendMessageToRoom(String from, String roomName, String message) {
         Packet packet = new Packet();
         sendPacket(packet);
     }
 
     @Override
-    public void sendMessageToConversation(String from, String to,
-            String message) {
+    public void sendMessageToConversation(String from, String to, String message) {
         Packet packet = new Packet();
         sendPacket(packet);
     }
@@ -65,9 +69,9 @@ public class ClientChat extends Client implements Chat {
     @Override
     public void authenticate(String user, String password) {
         userCredentials = new UserCredentials(user, password);
-        //Packet packet = packetProcess.buildPacket(PacketType.AUTH_REQUEST);
-        //packet.username = userCredentials.username;
-        //packet.password = userCredentials.password;
+        // Packet packet = packetProcess.buildPacket(PacketType.AUTH_REQUEST);
+        // packet.username = userCredentials.username;
+        // packet.password = userCredentials.password;
         Packet packet = new Packet();
         sendPacket(packet);
     }

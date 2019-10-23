@@ -131,7 +131,7 @@ public class ServerUI {
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!ServerApplication.server.isStarted()) {
+                if (!ServerApplication.server.isOnline()) {
                     ServerApplication.server.start();
                     btnStart.setText("STOP");
                 } else {

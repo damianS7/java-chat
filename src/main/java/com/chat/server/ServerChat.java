@@ -6,14 +6,17 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chat.network.SocketConnection;
+
 /**
  * Esta clase implementa en el servidor metodos concretos para gestionar el
  * servidor del chat.
  * 
  * @author Damian
  */
-public class ServerChat extends Server {
-    private List<ServerConnection> connections = new ArrayList<ServerConnection>();
+public class ServerChat extends BasicServer {
+    private List<SocketConnection> clientConnections = new ArrayList<SocketConnection>();
+    // private List<> authConnections; // Clientes logeados
     private int maxConnections = 100;
 
     public ServerChat() {
@@ -25,7 +28,7 @@ public class ServerChat extends Server {
      * Cierra todas las conexiones abiertas en el servidor
      */
     public void closeConnections() {
-        for (ServerConnection serverConnection : connections) {
+        for (SocketConnection serverConnection : clientConnections) {
             serverConnection.close();
         }
     }
@@ -38,16 +41,16 @@ public class ServerChat extends Server {
      * @return int Devuelve el numero de conexiones activas en el servidor
      */
     public int getCountConnections() {
-        return connections.size();
+        return clientConnections.size();
     }
 
-    public boolean addConnection(ServerConnection connection) {
+    public boolean addConnection(SocketConnection connection) {
         // Si hay demasiadas conexiones se rechaza
         if (getCountConnections() >= maxConnections) {
             return false;
         }
 
-        connections.add(connection);
+        clientConnections.add(connection);
         return true;
     }
 
@@ -79,19 +82,16 @@ public class ServerChat extends Server {
 
     @Override
     public void run() {
-        while (isStarted()) {
+        while (isOnline()) {
             try {
-                Socket connectionSocket = serverSocket.accept();
+                Socket socket = serverSocket.accept();
                 ServerApplication.ui.log.addLine("Un nuevo cliente se ha conectado.");
-                ServerConnection sc = new ServerConnection(connectionSocket);
-                
-                if ( addConnection(sc) ) {
-                    ServerConnectionPacketHandler spc = new ServerConnectionPacketHandler(sc);
-                    new Thread(spc).start();
-                } else {
-                    sc.close();
+                ServerClientSocket client = new ServerClientSocket(socket);
+
+                if (!addConnection(client)) {
+                    client.close();
                 }
-                
+
             } catch (SocketException e) {
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,6 +100,6 @@ public class ServerChat extends Server {
 
         ServerApplication.ui.log.addLine("Cerrando conexiones.");
         closeConnections();
-        connections.clear();
+        clientConnections.clear();
     }
 }

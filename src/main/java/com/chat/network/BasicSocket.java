@@ -2,12 +2,12 @@ package com.chat.network;
 
 import java.net.Socket;
 
-public interface Connection {
+public interface BasicSocket {
     public void close();
 
     public String getAddress();
 
     public boolean isAlive();
 
-    public Socket getConnectionSocket();
+    public Socket getSocket();
 }
