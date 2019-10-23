@@ -6,22 +6,14 @@ import java.net.SocketException;
 
 
 public abstract class Client {
-    protected ClientConnection connection;
+    protected Socket socket;
 
     // Conecta con el servidor
     public boolean connect() {
         try {
-            connection = new ClientConnection(
-                    new Socket(ClientApplication.config.getAddress(),
-                            ClientApplication.config.getPort()));
-
-            new Thread(connection).start();
-
-            if (connection.isAlive()) {
-                ClientApplication.ui.setStatus("Connected");
-                return true;
-            }
-
+            socket = new Socket(ClientApplication.config.getAddress(),
+                            ClientApplication.config.getPort());
+            return true;
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -30,23 +22,20 @@ public abstract class Client {
         return false;
     }
 
-    public void sendPacket(Packet packet) {
-        connection.writePacket(packet);
-    }
-
     // Desconecta y cierra la conexion con el servidor
     public void disconnect() {
-        connection.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Metodo para comprobar que nuestro cliente sigue conectado con el servidor
     public boolean isConnected() {
-        return connection.isAlive();
+        if(socket == null) {
+            return false;
+        }
+        return !socket.isClosed();
     }
-
-    // Metodo para comprobar si el usuario esta autentificado
-    public boolean isAuth() {
-        return true;
-    }
-
 }

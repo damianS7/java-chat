@@ -1,5 +1,7 @@
 package com.chat.network;
 
+import com.chat.network.packets.Packet;
+
 public interface ConnectionIO {
     /**
      * Envia un objeto a traves del socket

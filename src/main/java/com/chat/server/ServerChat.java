@@ -17,14 +17,17 @@ public class ServerChat extends Server {
     private int maxConnections = 100;
 
     public ServerChat() {
-	setAddress(ServerApplication.config.getAddress());
-	setPort(ServerApplication.config.getPort());
+        setAddress(ServerApplication.config.getAddress());
+        setPort(ServerApplication.config.getPort());
     }
 
+    /**
+     * Cierra todas las conexiones abiertas en el servidor
+     */
     public void closeConnections() {
-	for (ServerConnection serverConnection : connections) {
-	    serverConnection.close();
-	}
+        for (ServerConnection serverConnection : connections) {
+            serverConnection.close();
+        }
     }
 
     public void kick() {
@@ -35,62 +38,68 @@ public class ServerChat extends Server {
      * @return int Devuelve el numero de conexiones activas en el servidor
      */
     public int getCountConnections() {
-	return connections.size();
+        return connections.size();
     }
 
     public boolean addConnection(ServerConnection connection) {
-	// Si hay demasiadas conexiones se rechaza
-	if (getCountConnections() >= maxConnections) {
-	    connection.close();
-	    return false;
-	}
+        // Si hay demasiadas conexiones se rechaza
+        if (getCountConnections() >= maxConnections) {
+            return false;
+        }
 
-	connections.add(connection);
-	return true;
+        connections.add(connection);
+        return true;
     }
 
     @Override
     public boolean start() {
-	if (!super.start()) {
-	    return false;
-	}
+        if (!super.start()) {
+            return false;
+        }
 
-	new Thread(this).start();
+        new Thread(this).start();
 
-	ServerApplication.ui.log.addLine("Servidor escuchando en " + ServerApplication.config.getAddress() + ":"
-		+ ServerApplication.config.getPort());
+        ServerApplication.ui.log.addLine("Servidor escuchando en " + ServerApplication.config.getAddress() + ":"
+                + ServerApplication.config.getPort());
 
-	ServerApplication.ui.setStatus("Started.");
-	return true;
+        ServerApplication.ui.setStatus("Started.");
+        return true;
     }
 
     @Override
     public boolean stop() {
-	if (!super.stop()) {
-	    return false;
-	}
+        if (!super.stop()) {
+            return false;
+        }
 
-	ServerApplication.ui.log.addLine("Servidor detenido.");
-	ServerApplication.ui.setStatus("Stopped.");
-	return true;
+        ServerApplication.ui.log.addLine("Servidor detenido.");
+        ServerApplication.ui.setStatus("Stopped.");
+        return true;
     }
 
     @Override
     public void run() {
-	while (isStarted()) {
-	    try {
-		Socket connectionSocket = serverSocket.accept();
-		ServerConnection sc = new ServerConnection(connectionSocket);
-		addConnection(sc);
-		new Thread(sc).start();
-	    } catch (SocketException e) {
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	}
+        while (isStarted()) {
+            try {
+                Socket connectionSocket = serverSocket.accept();
+                ServerApplication.ui.log.addLine("Un nuevo cliente se ha conectado.");
+                ServerConnection sc = new ServerConnection(connectionSocket);
+                
+                if ( addConnection(sc) ) {
+                    ServerConnectionPacketHandler spc = new ServerConnectionPacketHandler(sc);
+                    new Thread(spc).start();
+                } else {
+                    sc.close();
+                }
+                
+            } catch (SocketException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-	ServerApplication.ui.log.addLine("Cerrando conexiones.");
-	closeConnections();
-	connections.clear();
+        ServerApplication.ui.log.addLine("Cerrando conexiones.");
+        closeConnections();
+        connections.clear();
     }
 }

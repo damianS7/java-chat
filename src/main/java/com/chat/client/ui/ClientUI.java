@@ -28,7 +28,7 @@ public class ClientUI {
     public JMenuBar menuBar;
     private LogTab log;
     private JTabbedPane tabsPanel;
-    private RoomList rooms;
+    private JListRooms rooms;
 
     // Array con los tabs abiertos en el cliente (Conversaciones/salas de chat
     public List<Tab> tabs = new ArrayList<Tab>();
@@ -135,7 +135,7 @@ public class ClientUI {
     private void initComponents() {
         frame = new JFrame();
         menuBar = new MenuBar();
-        rooms = new RoomList();
+        rooms = new JListRooms();
         log = new LogTab();
 
         frame.setSize(900, 600);
@@ -155,9 +155,9 @@ public class ClientUI {
         tabsPanel = new JTabbedPane(JTabbedPane.TOP);
         frame.getContentPane().add(tabsPanel, "cell 1 0,grow");
     }
-    
+
     public void setStatus(String status) {
-	lblStatus.setText(status);
+        lblStatus.setText(status);
     }
 
 }

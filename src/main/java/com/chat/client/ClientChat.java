@@ -5,69 +5,70 @@ import java.util.List;
 import com.chat.common.Conversation;
 import com.chat.common.Room;
 import com.chat.database.UserCredentials;
-import com.chat.network.Packet;
-import com.chat.network.PacketType;
+import com.chat.network.packets.Packet;
+import com.chat.network.packets.PingPacket;
 
 public class ClientChat extends Client implements Chat {
+    protected ClientConnection connection;
     protected UserCredentials userCredentials;
-    protected ClientPacketProcessor packetProcess;
+    protected ClientConnectionPacketHandler packetHandler;
     protected List<Conversation> activeConversations;
     protected List<Room> activeRooms;
 
-    public ClientChat() {
-        packetProcess = new ClientPacketProcessor();
-    }
-
     @Override
     public boolean connect() {
-
         if (!super.connect()) {
             return false;
         }
+        
+        connection = new ClientConnection(socket);
+        packetHandler = new ClientConnectionPacketHandler(connection);
+        new Thread(packetHandler).start();
 
-        authenticate(ClientApplication.config.getUsername(),
-                ClientApplication.config.getPassword());
+
+        //authenticate(ClientApplication.config.getUsername(),
+                //ClientApplication.config.getPassword());
 
         return connection.isAlive();
     }
 
+    public void sendPacket(Packet packet) {
+        connection.writePacket(packet);
+    }
+
     @Override
     public void exitRoom(String roomName) {
-        Packet packet = packetProcess.buildPacket(PacketType.EXIT_ROOM_REQUEST);
-        packet.roomName = roomName;
+        Packet packet = new Packet();
         sendPacket(packet);
     }
 
     @Override
     public void enterRoom(String roomName) {
-        Packet packet = packetProcess.buildPacket(PacketType.JOIN_ROOM_REQUEST);
-        packet.roomName = roomName;
+        Packet packet = new Packet();
         sendPacket(packet);
     }
 
     @Override
     public void sendMessageToRoom(String from, String roomName,
             String message) {
-        Packet packet = packetProcess.buildPacket(PacketType.JOIN_ROOM_REQUEST);
-        packet.roomName = roomName;
+        Packet packet = new Packet();
         sendPacket(packet);
     }
 
     @Override
     public void sendMessageToConversation(String from, String to,
             String message) {
-        Packet packet = packetProcess.buildPacket(PacketType.JOIN_ROOM_REQUEST);
-        packet.from = from;
-        packet.to = to;
+        Packet packet = new Packet();
         sendPacket(packet);
     }
 
     @Override
     public void authenticate(String user, String password) {
         userCredentials = new UserCredentials(user, password);
-        Packet packet = packetProcess.buildPacket(PacketType.AUTH_REQUEST);
-        packet.username = userCredentials.username;
-        packet.password = userCredentials.password;
+        //Packet packet = packetProcess.buildPacket(PacketType.AUTH_REQUEST);
+        //packet.username = userCredentials.username;
+        //packet.password = userCredentials.password;
+        Packet packet = new Packet();
         sendPacket(packet);
     }
 

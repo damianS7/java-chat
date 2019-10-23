@@ -9,11 +9,9 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import com.chat.network.SocketConnection;
-import com.chat.network.Packet;
-import com.chat.network.PacketProcessor;
+import com.chat.network.packets.Packet;
 
-public class ClientConnection extends SocketConnection implements Runnable {
-    protected PacketProcessor packetProcessor;
+public class ClientConnection extends SocketConnection {
 
     public ClientConnection(Socket socket) {
         super(socket);
@@ -70,25 +68,4 @@ public class ClientConnection extends SocketConnection implements Runnable {
 
         return packet;
     }
-
-    @Override
-    public void run() {
-        while (isAlive()) {
-            Packet p = null;
-            try {
-                p = readPacket();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
-
-            if (p != null) {
-                packetProcessor.processPacket(p);
-            }
-        }
-
-        close();
-        System.out.println("Conexion terminada");
-    }
-
 }

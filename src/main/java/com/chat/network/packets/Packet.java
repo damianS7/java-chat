@@ -1,4 +1,4 @@
-package com.chat.network;
+package com.chat.network.packets;
 
 import java.io.Serializable;
 
