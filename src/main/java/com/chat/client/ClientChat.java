@@ -3,7 +3,7 @@ package com.chat.client;
 import java.util.List;
 
 import com.chat.common.Conversation;
-import com.chat.common.Room;
+import com.chat.common.BasicRoom;
 import com.chat.database.UserCredentials;
 import com.chat.network.packets.Packet;
 import com.chat.network.packets.PingPacket;
@@ -12,7 +12,7 @@ public class ClientChat extends Client implements Chat {
     protected ClientServerSocket connection;
     protected UserCredentials userCredentials;
     protected List<Conversation> activeConversations;
-    protected List<Room> activeRooms;
+    protected List<BasicRoom> activeRooms;
 
     @Override
     public boolean connect() {

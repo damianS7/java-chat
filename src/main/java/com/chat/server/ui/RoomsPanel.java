@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import com.chat.common.Room;
+import com.chat.common.BasicRoom;
 import com.chat.server.ServerApplication;
 
 import net.miginfocom.swing.MigLayout;
@@ -106,7 +106,7 @@ public class RoomsPanel extends JPanel {
 		    return;
 		}
 
-		Room r = new Room(name, desc);
+		BasicRoom r = new BasicRoom(name, desc);
 		String[] mods = mod.getText().split(",");
 
 		for (String mod : mods) {
@@ -140,8 +140,8 @@ public class RoomsPanel extends JPanel {
     }
 
     private void loadRooms() {
-	List<Room> rooms = ServerApplication.roomDatabase.getRooms();
-	for (Room row : rooms) {
+	List<BasicRoom> rooms = ServerApplication.roomDatabase.getRooms();
+	for (BasicRoom row : rooms) {
 	    listModel.addElement(row.name);
 	}
     }
