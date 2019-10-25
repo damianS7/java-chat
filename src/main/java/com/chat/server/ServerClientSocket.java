@@ -39,7 +39,7 @@ public class ServerClientSocket extends SocketConnection {
     @Override
     public void run() {
         super.run();
-        ServerApplication.ui.log.addLine("Cliente desconectado.");
+        ServerApplication.ui.log.append("Cliente desconectado.");
     }
 
 }

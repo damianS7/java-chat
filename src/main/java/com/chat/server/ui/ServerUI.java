@@ -1,23 +1,24 @@
 package com.chat.server.ui;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import com.chat.server.ServerApplication;
-
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.BorderLayout;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import java.awt.Font;
+
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+
+import com.chat.server.ServerApplication;
+
+import net.miginfocom.swing.MigLayout;
 
 /*
  * Interfaz grafica principal del servidor. Tambien contiene metodos
@@ -26,7 +27,8 @@ import javax.swing.border.EmptyBorder;
 public class ServerUI {
     private JPanel panelLoader;
     private JLabel lblTitle;
-    public JFrame frame;
+    private JFrame frame;
+    public StatusPanel status;
     public LogPanel log;
     public ConfigPanel config;
 
@@ -49,11 +51,11 @@ public class ServerUI {
         label_1.setIcon(new ImageIcon(ServerUI.class.getResource("/images/home.png")));
         panelMenu.add(label_1, "cell 0 1");
 
-        JButton btnHome = new JButtonLink("Home");
+        JButton btnHome = new JButtonLink("Status");
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadPanel("Home", new HomePanel());
+                loadPanel("Server status", new StatusPanel());
             }
         });
         panelMenu.add(btnHome, "cell 1 1,alignx left");
@@ -127,7 +129,7 @@ public class ServerUI {
         panelMenu.add(label_5, "cell 0 6");
         panelMenu.add(btnLog, "cell 1 6");
 
-        JButton btnStart = new JButton("Start");
+        JButton btnStart = new JButton("START");
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -175,7 +177,8 @@ public class ServerUI {
         frame.getContentPane().add(panelLoader);
         panelLoader.setLayout(new BorderLayout(0, 0));
 
-        loadPanel("Home", new HomePanel());
+        status = new StatusPanel();
+        loadPanel("Server status", status);
         frame.setVisible(true);
     }
 
@@ -204,16 +207,6 @@ public class ServerUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         frame.setLocationRelativeTo(null);
-    }
-
-    // Cambia el texto para mostrar estado actual del servidor
-    public void setStatus(String status) {
-        // labelStatus.setText(status);
-    }
-
-    // Actualiza el numero de conectados en la UI
-    public void setConnected(String connected) {
-        // labelConnected.setText(connected);
     }
 
     // Carga un panel en la interfaz

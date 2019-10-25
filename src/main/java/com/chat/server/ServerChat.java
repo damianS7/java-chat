@@ -62,10 +62,12 @@ public class ServerChat extends BasicServer {
 
         new Thread(this).start();
 
-        ServerApplication.ui.log.addLine("Servidor escuchando en " + ServerApplication.config.getAddress() + ":"
+        ServerApplication.ui.log.append("Servidor escuchando en " + ServerApplication.config.getAddress() + ":"
                 + ServerApplication.config.getPort());
 
-        ServerApplication.ui.setStatus("Started.");
+        ServerApplication.ui.status.setAddress(getAddress());
+        ServerApplication.ui.status.setPort(Integer.toString(getPort()));
+        ServerApplication.ui.status.setStatus("ONLINE");
         return true;
     }
 
@@ -75,8 +77,8 @@ public class ServerChat extends BasicServer {
             return false;
         }
 
-        ServerApplication.ui.log.addLine("Servidor detenido.");
-        ServerApplication.ui.setStatus("Stopped.");
+        ServerApplication.ui.log.append("Servidor detenido.");
+        ServerApplication.ui.status.setStatus("OFFLINE");
         return true;
     }
 
@@ -85,7 +87,7 @@ public class ServerChat extends BasicServer {
         while (isOnline()) {
             try {
                 Socket socket = serverSocket.accept();
-                ServerApplication.ui.log.addLine("Un nuevo cliente se ha conectado.");
+                ServerApplication.ui.log.append("Un nuevo cliente se ha conectado.");
                 ServerClientSocket client = new ServerClientSocket(socket);
 
                 if (!addConnection(client)) {
@@ -98,7 +100,7 @@ public class ServerChat extends BasicServer {
             }
         }
 
-        ServerApplication.ui.log.addLine("Cerrando conexiones.");
+        ServerApplication.ui.log.append("Cerrando conexiones.");
         closeConnections();
         clientConnections.clear();
     }

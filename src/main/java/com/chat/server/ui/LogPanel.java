@@ -12,30 +12,37 @@ import javax.swing.ScrollPaneConstants;
  * mas importantes que se registran en el servidor.
  */
 public class LogPanel extends JPanel {
-	private JTextArea textArea;
+    private JTextArea textArea;
 
-	public LogPanel() {
-		setLayout(new BorderLayout(0, 0));
+    public LogPanel() {
+        setLayout(new BorderLayout(0, 0));
 
-		textArea = new JTextArea();
-		textArea.setEditable(false);
+        textArea = new JTextArea();
+        textArea.setEditable(false);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportBorder(null);
-		scrollPane.setBorder(null);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setViewportView(textArea);
-	}
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportBorder(null);
+        scrollPane.setBorder(null);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setViewportView(textArea);
+    }
 
-	// Agrega una nueva linea al textarea que contiene el log.
-	public void addLine(String line) {
-		textArea.append(line + "\n");
-		textArea.setCaretPosition(textArea.getDocument().getLength());
-	}
+    // Agrega una nueva linea al textarea que contiene el log.
+    public void append(String line) {
+        // DateTime time
+        textArea.append(line + "\n");
+        textArea.setCaretPosition(textArea.getDocument().getLength());
+    }
 
-	// Borrar por completo el log mostrado.
-	public void clear() {
-		textArea.setText("");
-	}
+    public String getLog() {
+        return textArea.getText();
+    }
+
+    // public void saveLog
+
+    // Borrar por completo el log mostrado.
+    public void clear() {
+        textArea.setText("");
+    }
 }
