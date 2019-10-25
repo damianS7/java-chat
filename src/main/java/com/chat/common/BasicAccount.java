@@ -62,6 +62,7 @@ public class BasicAccount {
     public void setRoleString(String role) {
         if (!isValidRole(role)) {
             setRole(AccountRole.USER);
+            return;
         }
 
         setRole(AccountRole.valueOf(role));
