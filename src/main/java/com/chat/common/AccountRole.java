@@ -1,5 +1,6 @@
 package com.chat.common;
 
-public enum UserRole {
-    USER, MOD, ADMIN, SUPERADMIN
+public enum AccountRole {
+    USER, MOD, ADMIN, SUPERADMIN;
+
 }

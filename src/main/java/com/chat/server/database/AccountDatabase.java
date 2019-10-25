@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chat.common.BasicAccount;
 import com.chat.database.SQLiteDatabase;
 
 public class AccountDatabase extends SQLiteDatabase {
@@ -19,23 +20,24 @@ public class AccountDatabase extends SQLiteDatabase {
 
     // Muestra los resultados de la base de datos
     public void print() throws SQLException {
-        List<UserDatabaseRow> udrList = getUsers();
+        List<BasicAccount> udrList = getAccounts();
 
-        for (UserDatabaseRow user : udrList) {
-            System.out.println("Username: " + user.username + " Password: " + user.password + " Role: " + user.role);
+        for (BasicAccount user : udrList) {
+            System.out.println("Username: " + user.getUsername() + " Password: " + user.getPassword() + " Role: "
+                    + user.getRole());
         }
     }
 
     // Crea la tabla (si no existe) de la base datos
     public int createStructure() {
-        String query = "CREATE TABLE IF NOT EXISTS USERS (USERNAME CHAR(20) "
+        String query = "CREATE TABLE IF NOT EXISTS ACCOUNTS (USERNAME CHAR(20) "
                 + "PRIMARY KEY NOT NULL, PASSWORD CHAR(50) NOT NULL, " + "ROLE CHAR(10) NOT NULL)";
         return executeUpdate(query);
     }
 
     // Borra la tabla
     public int deleteStructure() {
-        String query = "DROP TABLE USERS";
+        String query = "DROP TABLE ACCOUNTS";
         return executeUpdate(query);
     }
 
@@ -46,23 +48,23 @@ public class AccountDatabase extends SQLiteDatabase {
     }
 
     // 1 Si se agrega el usuario
-    public int addUser(UserDatabaseRow user) throws SQLException {
+    public int addAccount(BasicAccount account) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO USERS (USERNAME, PASSWORD,ROLE) VALUES(?,?,?)";
+        String sql = "INSERT INTO ACCOUNTS (USERNAME, PASSWORD,ROLE) VALUES(?,?,?)";
 
         PreparedStatement pstmt = connection.getConnection().prepareStatement(sql);
-        pstmt.setString(1, user.username);
-        pstmt.setString(2, user.password);
-        pstmt.setString(3, user.role);
+        pstmt.setString(1, account.getUsername());
+        pstmt.setString(2, account.getPassword());
+        pstmt.setString(3, account.getRole().toString());
         result = pstmt.executeUpdate();
         pstmt.close();
         return result;
     }
 
     // Borra un usuario de la DB
-    public int deleteUser(String username) throws SQLException {
+    public int deleteAccount(String username) throws SQLException {
         int result = 0;
-        String sql = "DELETE FROM USERS WHERE USERNAME = ?";
+        String sql = "DELETE FROM ACCOUNTS WHERE USERNAME = ?";
         PreparedStatement pstmt = connection.getConnection().prepareStatement(sql);
         pstmt.setString(1, username);
         result = pstmt.executeUpdate();
@@ -72,9 +74,9 @@ public class AccountDatabase extends SQLiteDatabase {
 
     // 1 Si se actualiza alguna fila
     // 0 Si no se actualiza ninguna fila
-    public int updateUser(String username, String field, String value) throws SQLException {
+    public int updateAccount(String username, String field, String value) throws SQLException {
         int result = 0;
-        String sql = "UPDATE USERS SET " + field + " = ? WHERE USERNAME = ?";
+        String sql = "UPDATE ACCOUNTS SET " + field + " = ? WHERE USERNAME = ?";
         PreparedStatement pstmt = connection.getConnection().prepareStatement(sql);
         pstmt.setString(1, value);
         pstmt.setString(2, username);
@@ -83,14 +85,43 @@ public class AccountDatabase extends SQLiteDatabase {
         return result;
     }
 
+    /**
+     * Busca una Account en la base de datos.
+     * 
+     * @param username - Nombre de la Account a buscar
+     * @return Devuelve null si no encuentra una Account con el nombre indicado
+     * @throws SQLException
+     */
+    public BasicAccount getAccount(String username) throws SQLException {
+        String query = "SELECT USERNAME, PASSWORD, ROLE FROM ACCOUNTS WHERE USERNAME=?";
+        PreparedStatement ps = connection.getConnection().prepareStatement(query);
+        ps.setString(1, username);
+        ps.setMaxRows(1);
+        ResultSet rs = ps.executeQuery();
+
+        // No existe la Account buscada
+        if (!rs.next()) {
+            return null;
+        }
+
+        BasicAccount account = new BasicAccount();
+        account.setUsername(rs.getString("USERNAME"));
+        account.setPassword(rs.getString("PASSWORD"));
+        account.setRoleString(rs.getString("ROLE"));
+
+        ps.close();
+        rs.close();
+        return account;
+    }
+
     // Devuelve una lista con todos los usuarios de la DB
-    public List<UserDatabaseRow> getUsers() {
-        List<UserDatabaseRow> udrList = new ArrayList<UserDatabaseRow>();
+    public List<BasicAccount> getAccounts() {
+        List<BasicAccount> accountList = new ArrayList<BasicAccount>();
         try {
             Statement s = connection.getConnection().createStatement();
-            ResultSet rs = s.executeQuery("SELECT USERNAME, PASSWORD, ROLE FROM USERS");
+            ResultSet rs = s.executeQuery("SELECT USERNAME, PASSWORD, ROLE FROM ACCOUNTS");
             while (rs.next()) {
-                UserDatabaseRow udr = new UserDatabaseRow();
+                BasicAccount account = new BasicAccount();
 
                 ResultSetMetaData rsm = rs.getMetaData();
                 int numCols = rsm.getColumnCount();
@@ -100,19 +131,19 @@ public class AccountDatabase extends SQLiteDatabase {
                     String value = rs.getString(indexColumn);
 
                     if (key.equals("USERNAME")) {
-                        udr.username = value;
+                        account.setUsername(value);
                     }
 
                     if (key.equals("PASSWORD")) {
-                        udr.password = value;
+                        account.setPassword(value);
                     }
 
                     if (key.equals("ROLE")) {
-                        udr.role = value;
+                        account.setRoleString(value);
                     }
                 }
 
-                udrList.add(udr);
+                accountList.add(account);
             }
 
             s.close();
@@ -121,7 +152,7 @@ public class AccountDatabase extends SQLiteDatabase {
             e.printStackTrace();
         }
 
-        return udrList;
+        return accountList;
     }
 
     // Ejecuta SQL del tipo INSERT, UPDATE y DELETE
