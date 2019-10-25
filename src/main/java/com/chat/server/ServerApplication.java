@@ -23,41 +23,42 @@ public class ServerApplication {
     public static ServerPreferences config;
     public static RoomDatabase roomDatabase;
     public static AccountDatabase accountDatabase;
+    // public static Logger log
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
-	File fileProperties = new File("server.properties");
-	File fileRooms = new File("rooms.sqlite");
-	File fileAccounts = new File("accounts.sqlite");
+        File fileProperties = new File("server.properties");
+        File fileRooms = new File("rooms.sqlite");
+        File fileAccounts = new File("accounts.sqlite");
 
-	// Comprobacion de ficheros
-	if (!fileProperties.exists()) {
-	    fileProperties.createNewFile();
-	}
+        // Comprobacion de ficheros
+        if (!fileProperties.exists()) {
+            fileProperties.createNewFile();
+        }
 
-	if (!fileAccounts.exists()) {
-	    fileAccounts.createNewFile();
-	}
+        if (!fileAccounts.exists()) {
+            fileAccounts.createNewFile();
+        }
 
-	if (!fileRooms.exists()) {
-	    fileRooms.createNewFile();
-	}
+        if (!fileRooms.exists()) {
+            fileRooms.createNewFile();
+        }
 
-	roomDatabase = new RoomDatabase(fileRooms);
-	roomDatabase.connect();
-	roomDatabase.createStructure();
+        roomDatabase = new RoomDatabase(fileRooms);
+        roomDatabase.connect();
+        roomDatabase.createStructure();
 
-	accountDatabase = new AccountDatabase(fileAccounts);
-	accountDatabase.connect();
-	accountDatabase.createStructure();
+        accountDatabase = new AccountDatabase(fileAccounts);
+        accountDatabase.connect();
+        accountDatabase.createStructure();
 
-	config = new ServerPreferences(fileProperties);
-	server = new ServerChat();
+        config = new ServerPreferences(fileProperties);
+        server = new ServerChat();
 
-	// Inicio de la interfaz grafica en un hilo separado
-	EventQueue.invokeLater(new Runnable() {
-	    public void run() {
-		ServerApplication.ui = new ServerUI();
-	    }
-	});
+        // Inicio de la interfaz grafica en un hilo separado
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                ServerApplication.ui = new ServerUI();
+            }
+        });
     }
 }
