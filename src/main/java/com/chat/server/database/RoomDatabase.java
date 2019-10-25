@@ -83,12 +83,40 @@ public class RoomDatabase extends SQLiteDatabase {
         return result;
     }
 
+    /**
+     * Busca una Room en la base de datos.
+     * 
+     * @param roomName - Nombre de la Room a buscar
+     * @return Devuelve null si no encuentra una sala con el nombre indicado
+     * @throws SQLException
+     */
+    public BasicRoom getRoom(String roomName) throws SQLException {
+        String query = "SELECT NAME, DESCRIPTION FROM ROOMS WHERE NAME=?";
+        PreparedStatement ps = connection.getConnection().prepareStatement(query);
+        ps.setString(1, roomName);
+        ps.setMaxRows(1);
+        ResultSet rs = ps.executeQuery();
+
+        // No existe la Room buscada
+        if (!rs.next()) {
+            return null;
+        }
+
+        BasicRoom room = new BasicRoom();
+        room.name = rs.getString("NAME");
+        room.description = rs.getString("DESCRIPTION");
+
+        ps.close();
+        rs.close();
+        return room;
+    }
+
     // Devuelve una lista con todos los usuarios de la DB
     public List<BasicRoom> getRooms() {
         List<BasicRoom> udrList = new ArrayList<BasicRoom>();
         try {
             Statement s = connection.getConnection().createStatement();
-            ResultSet rs = s.executeQuery("SELECT NAME, DESCRIPTION, IMAGE FROM ROOMS");
+            ResultSet rs = s.executeQuery("SELECT NAME, DESCRIPTION FROM ROOMS");
             while (rs.next()) {
                 BasicRoom room = new BasicRoom();
 
