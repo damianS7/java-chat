@@ -1,6 +1,7 @@
 package com.chat.server;
 
 import java.net.Socket;
+import java.util.logging.Logger;
 
 import com.chat.network.SocketConnection;
 import com.chat.network.packets.Packet;
@@ -18,6 +19,7 @@ import com.chat.network.packets.PongPacket;
  */
 
 public class ServerClientSocket extends SocketConnection {
+    private static Logger logger = Logger.getLogger(ServerApplication.class.getName());
 
     public ServerClientSocket(Socket socket) {
         super(socket);
@@ -31,7 +33,7 @@ public class ServerClientSocket extends SocketConnection {
         }
 
         if (packet instanceof PongPacket) {
-            System.out.println("Pong received on server! keep alive.");
+            logger.info("Pong received on server! keep alive.");
         }
 
     }
@@ -40,6 +42,7 @@ public class ServerClientSocket extends SocketConnection {
     public void run() {
         super.run();
         ServerApplication.ui.log.append("Cliente desconectado.");
+        logger.info("La conexion con el cliente ha terminado.");
     }
 
 }

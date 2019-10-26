@@ -3,11 +3,13 @@ package com.chat.server;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.logging.Logger;
 
 /*
  * Clase base para implementar el Servidor. 
  */
 public abstract class BasicServer implements Server, Runnable {
+    private static Logger logger = Logger.getLogger(BasicServer.class.getName());
 
     // Direccion donde el servidor aceptara los clientes
     private String address;
@@ -19,11 +21,11 @@ public abstract class BasicServer implements Server, Runnable {
     protected ServerSocket serverSocket;
 
     // Estado actual del servidor
-    private boolean started = false;
+    private boolean online = false;
 
     // Devuelve el estado actual del servidor. true para el servidor iniciado.
     public boolean isOnline() {
-        return started;
+        return online;
     }
 
     // Cambia el puerto de esucha del servidor
@@ -52,18 +54,20 @@ public abstract class BasicServer implements Server, Runnable {
      *         inicia el servidor se devuelve <strong>false</strong>.
      */
     public boolean start() {
+        logger.info("Iniciando servidor ...");
         // Si el servidor ya esta iniciado no se hace nada
         if (isOnline()) {
+            logger.info("No se hara nada porque el servidor ya estaba iniciado.");
             return true;
         }
 
         try {
             InetAddress addr = InetAddress.getByName(address);
             serverSocket = new ServerSocket(port, 0, addr);
-            started = true;
+            online = true;
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info("No se pudo inicar el servidor. " + e.getMessage());
         }
 
         // Error al iniciar el servidor
@@ -78,17 +82,20 @@ public abstract class BasicServer implements Server, Runnable {
      *         detiene el servidor se devuelve <strong>false</strong>.
      */
     public boolean stop() {
+        logger.info("Deteniendo el servidor ...");
+
         // El servidor no esta iniciado.
         if (!isOnline()) {
+            logger.info("No se hara nada, el servidor ya estaba offline.");
             return true;
         }
 
         try {
             serverSocket.close();
-            started = false;
+            online = false;
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info("No se pudo detener el servidor. " + e.getMessage());
         }
         return false;
     }
