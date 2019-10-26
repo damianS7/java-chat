@@ -3,8 +3,10 @@ package com.chat.server.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -31,6 +33,10 @@ public class ServerUI {
     public StatusPanel status;
     public LogPanel log;
     public ConfigPanel config;
+    private Font openSans;
+    private Font menuFont;
+    private Font titleFont;
+    private Font menuLinkFont;
 
     public ServerUI() {
         setLookAndFeel();
@@ -42,9 +48,9 @@ public class ServerUI {
         frame.getContentPane().add(panelMenu);
         panelMenu.setLayout(new MigLayout("", "[16.00][grow,left]", "[][][][][][][][][][][][grow][][]"));
 
-        JLabel lblAdministration = new JLabel("Administration");
+        JLabel lblAdministration = new JLabel("Java Chat");
+        lblAdministration.setFont(menuFont);
         lblAdministration.setForeground(new Color(185, 187, 189));
-        lblAdministration.setFont(new Font("Noto Sans", Font.BOLD, 16));
         panelMenu.add(lblAdministration, "cell 0 0 2 1,alignx center");
 
         JLabel label_1 = new JLabel("");
@@ -52,6 +58,7 @@ public class ServerUI {
         panelMenu.add(label_1, "cell 0 1");
 
         JButton btnHome = new JButtonLink("Status");
+        btnHome.setFont(menuLinkFont);
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -150,13 +157,12 @@ public class ServerUI {
         titlePanel.setLayout(null);
 
         lblTitle = new JLabel("");
-        lblTitle.setFont(new Font("Ubuntu", Font.BOLD, 18));
+        lblTitle.setFont(titleFont);
         lblTitle.setBounds(15, 4, 464, 25);
         titlePanel.add(lblTitle);
 
         JButton closeButton = new JButtonLink("");
         closeButton.setIcon(new ImageIcon(ServerUI.class.getResource("/images/close.png")));
-        closeButton.setFont(new Font("Noto Sans", Font.BOLD, 18));
         closeButton.setForeground(new Color(255, 0, 0));
         closeButton.setBounds(694, 4, 26, 14);
         closeButton.addActionListener(new ActionListener() {
@@ -184,8 +190,24 @@ public class ServerUI {
 
     private void setLookAndFeel() {
         try {
+            System.setProperty("awt.useSystemAAFontSettings", "on");
+            System.setProperty("awt.aatext", "true");
+
+            openSans = Font.createFont(Font.TRUETYPE_FONT,
+                    ServerUI.class.getResource("/fonts/OpenSans-Regular.ttf").openStream());
+            openSans = openSans.deriveFont(13f);
+
+            menuFont = openSans.deriveFont(Font.BOLD, 16f);
+            menuLinkFont = openSans.deriveFont(14f);
+            titleFont = openSans.deriveFont(Font.BOLD, 18f);
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            // UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            UIManager.put("Label.font", openSans);
+            UIManager.put("Button.font", openSans);
+            UIManager.put("List.font", openSans);
+            UIManager.put("TextField.font", openSans);
+            UIManager.put("ComboBox.font", openSans);
+            UIManager.put("TextArea.font", openSans);
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println(e.getMessage());
         } catch (ClassNotFoundException e) {
@@ -194,6 +216,10 @@ public class ServerUI {
             System.out.println(e.getMessage());
         } catch (IllegalAccessException e) {
             System.out.println(e.getMessage());
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
